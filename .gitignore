@@ -1,7 +1,9 @@
 bin/
 obj/
+build/
 
 .DS_Store
 Thumbs.db
 
 Directory.Build.props
+FarmDoctor.code-workspace
