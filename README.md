@@ -1,15 +1,16 @@
-# Elin Mod Template
+**A QoL mod that enhances your knowledge about your crops based on your Farming skill level.**
 
-Using this template:
-- Rename `ExampleMod.csproj` -> `YourModName.csproj`
-- Modify in `.csproj`
-  - `<ModName>Mod_ExampleMod</ModName>` -> `Mod_YourModName`
-- Modify in `Plugin.cs`
-  - `[BepInPlugin("yourname.example.mod", "Example Mod", "1.0.0.0")]` to have a unique mod id, and an interesting title for your mod
-  - `var harmony = new Harmony("yourname.example.mod");` with the same id.
+### Current Features
 
-Building: `dotnet build`. This will copy the resulting `.dll` to the folder `Elin/Package/Mod_ExampleMod/` (or whatever you named it), you can edit the csproj to switch to only copying to a `build/` directory in the current folder.
+-   Displays how many growing stages crops have.
+-   Displays how long until the crop grows to the next stage _if_ you have the minimum farming level required.
+-   Configurable minimum farming level required.
+    -   Defaults are level 10 for Basic info (Growth stages) and 17 for full info (Time to grow).
 
-----
+### TODOs and POSSIBLE additional features
 
-LICENSE: This *template* is under MIT/APACHE (very permissive). Your code can be under whatever license you want, with the default being not thinking about it at all.
+**Again, this is tentative.**
+
+-   Figure out how to deal with seeds. (Right now they don't have growing info)
+-   Add extra inspect window for even more detailed information (What information? IDK, some information).
+-   **POSSIBLY** expand the grow system. (This one warrants the big "possibly" because, in the end, this is EA. All the things that aren't being used right now in these systems most likely are planned to be expanded upon by Noa.)
