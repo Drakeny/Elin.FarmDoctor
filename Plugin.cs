@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace FarmDoctor;
 
-[BepInPlugin("DrakenyDev.Elin.FarmDoctor", "Farm Doctor", "1.0.0.0")]
+[BepInPlugin("DrakenyDev.Elin.FarmDoctor", "Farm Doctor", "1.0.0.1")]
 public class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log;
@@ -32,6 +32,7 @@ public class Plugin : BaseUnityPlugin
         Log = base.Logger;
         harmony = new Harmony("DrakenyDev.Elin.FarmDoctor");
         harmony.PatchAll();
+        Log.LogInfo("DrakenyDev.Elin.FarmDoctor loaded");
     }
 
     
@@ -59,7 +60,7 @@ public class DrakTest
 
             if (FarmingLevel >= Plugin.minFarmingLevelFullInfo.Value)
             {
-                float num = __instance.pos.cell.growth.Step * __instance.pos.cell.growth.MtpProgress * (flag2 ? 2 : 1);
+                float num = __instance.pos.cell.growth.Step * 1 * (flag2 ? 2 : 1); // Hardcoded '1' as the grow function is not using MtpProgress
                 string phase = __instance.pos.cell.growth.HarvestStage == __instance.pos.cell.growth.stage.idx ? "Withering" : "Growth";
 
                 string rdy = ") / Ready to Harvest] ";
@@ -88,7 +89,7 @@ public class DrakTest
                         "/",
                         lastStage.ToString(),
                         ") / ",
-                        CalculateDaysTillNextStage(num, __instance.pos.cell.objVal).ToString(),
+                        CalculateDaysTillNextStage(num, __instance.pos.cell.objVal, flag2).ToString(),
                         "~ Day(s) until ",
                         withered ? "Perish" : phase,
                         "]"
@@ -111,7 +112,7 @@ public class DrakTest
         }
     }
 
-    public static int CalculateDaysTillNextStage(float num, int objVal)
+    public static int CalculateDaysTillNextStage(float num, int objVal, bool isWatered)
     {
         int nextStageObjVal = (int)Math.Ceiling((double)objVal / 30) * 30;
         if (nextStageObjVal == objVal) // plant has just grown
@@ -119,9 +120,16 @@ public class DrakTest
             objVal = (int)Math.Ceiling((double)objVal / 30) + 1; // update objVal to new value after growth
         }
         int remainingObjVal = (int)Math.Ceiling((double)objVal / 30) * 30 - objVal;
-    
-        int daysToReachNextStage = (int)Math.Ceiling((double)remainingObjVal / num);
+        int daysToReachNextStage;
+        if (isWatered)
+        {
+            remainingObjVal -= (int)num/2;
+            daysToReachNextStage = (int)Math.Ceiling((double)remainingObjVal / (num / 2));;
+        }
+        else
+        {
+            daysToReachNextStage = (int)Math.Ceiling((double)remainingObjVal / num);
+        }
         return daysToReachNextStage;
     }
-
 }
