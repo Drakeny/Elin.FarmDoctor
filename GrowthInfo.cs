@@ -1,49 +1,14 @@
-﻿using System;
+using System;
 using System.Linq;
 using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
 
+
 namespace FarmDoctor;
 
-[BepInPlugin("DrakenyDev.Elin.FarmDoctor", "Farm Doctor", "1.0.0.1")]
-public class Plugin : BaseUnityPlugin
-{
-    internal static ManualLogSource Log;
-    public static ConfigEntry<int> minFarmingLevelBasicInfo;
-    public static ConfigEntry<int> minFarmingLevelFullInfo;
-    private static Harmony harmony;
-
-    private void Start()
-    {
-        
-        minFarmingLevelBasicInfo = Config.Bind("General",      // The section under which the option is shown
-                                        "minFarmingLevelBasicInfo",  // The key of the configuration option in the configuration file
-                                        10, // The default value
-                                        "The minimum farming level to show basic crop information."); // Description of the option to show in the config file
-
-        minFarmingLevelFullInfo = Config.Bind("General", 
-                                            "minFarmingLevelFullInfo",
-                                            17,
-                                            "Minimum farming level to show full crop information.");
-
-        Log = base.Logger;
-        harmony = new Harmony("DrakenyDev.Elin.FarmDoctor");
-        harmony.PatchAll();
-        Log.LogInfo("DrakenyDev.Elin.FarmDoctor loaded");
-    }
-
-    
-private void OnDestroy()
-{
-    harmony.UnpatchSelf();
-}
-}
-
 [HarmonyPatch]
-public class DrakTest
+public class GrowthInfo
 {
     [HarmonyPostfix, HarmonyPatch(typeof(BaseTaskHarvest), "GetTextSmall")]
     public static void GetTextSmall(BaseTaskHarvest __instance, ref string __result){
