@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace FarmDoctor;
 
-[BepInPlugin("DrakenyDev.Elin.FarmDoctor", "Farm Doctor", "1.1.0")]
+[BepInPlugin("DrakenyDev.Elin.FarmDoctor", "Farm Doctor", "1.2.0")]
 public class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log;
@@ -20,23 +20,23 @@ public class Plugin : BaseUnityPlugin
 
     private void Start()
     {
-        
+
         minFarmingLevelBasicInfo = Config.Bind("General",      // The section under which the option is shown
                                         "minFarmingLevelBasicInfo",  // The key of the configuration option in the configuration file
                                         10, // The default value
                                         "The minimum farming level to show basic crop information."); // Description of the option to show in the config file
 
-        minFarmingLevelFullInfo = Config.Bind("General", 
+        minFarmingLevelFullInfo = Config.Bind("General",
                                             "minFarmingLevelFullInfo",
                                             17,
                                             "Minimum farming level to show full crop information.");
 
-        regrowth = Config.Bind("Experimental", 
+        regrowth = Config.Bind("General",
                                 "regrowth",
-                                false,
-                                "***EXPERIMENTAL*** Enables the ability to trigger regrowth on trees by re-applying fertilizer.");
+                                true,
+                                "Enables the ability to trigger regrowth on trees by re-applying fertilizer.");
 
-        minLevelRegrowth = Config.Bind("Experimental", 
+        minLevelRegrowth = Config.Bind("General",
                                 "minLevelRegrowth",
                                 15,
                                 "Minimum farming level required to trigger regrowth.");
@@ -44,14 +44,15 @@ public class Plugin : BaseUnityPlugin
         Log = base.Logger;
         harmony = new Harmony("DrakenyDev.Elin.FarmDoctor");
         harmony.PatchAll(typeof(GrowthInfo));
-        if(regrowth.Value){
-            Log.LogInfo("Experimental feature *regrowth* is enabled");
+        harmony.PatchAll(typeof(CropInfo));
+        if (regrowth.Value)
+        {
             harmony.PatchAll(typeof(Regrowth));
         }
         Log.LogInfo("DrakenyDev.Elin.FarmDoctor loaded");
     }
 
-    
+
     private void OnDestroy()
     {
         harmony.UnpatchSelf();

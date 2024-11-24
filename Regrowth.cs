@@ -36,7 +36,7 @@ public class Regrowth
     public static void OnSimulateHour(TraitFertilizer __instance, VirtualDate date)
     {
         if(!EClass._zone.IsPCFaction) return;
-        if(Plugin.minLevelRegrowth.Value < EClass.pc.elements.Value(286)) return;
+        if(Plugin.minLevelRegrowth.Value > EClass.pc.elements.Value(286)) return;
         Cell cell = __instance.owner.Cell;
         if (cell.IsFarmField && cell.isHarvested)
         {
