@@ -49,6 +49,9 @@
     <Reference Include="Plugins.BaseCore">
       <HintPath>$(ManagedPath)/Plugins.BaseCore.dll</HintPath>
     </Reference>
+    <Reference Include="Plugins.Sound">
+      <HintPath>$(ManagedPath)/Plugins.Sound.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">

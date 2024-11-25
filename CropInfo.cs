@@ -24,6 +24,7 @@ public class CropInfo
                 Thing thing = (plantData != null) ? plantData.seed : null;
                 if (thing != null)
                 {
+                    SE.Rotate();
                     EClass.ui.AddLayer<LayerInfo>().Set(thing, true);
                 }
             }
