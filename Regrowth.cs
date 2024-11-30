@@ -43,12 +43,21 @@ public class Regrowth
 
     }
 
+    [HarmonyPrefix, HarmonyPatch(typeof(TraitFertilizer), "OnSimulateHour")]
+    public static bool OnSimulateHourPrefix(TraitFertilizer __instance, VirtualDate date, out Cell __state)
+    {
+        //Hmm, could probably run everything on prefix, but i'll leave like this for now.
+        __state = __instance.owner.Cell;
+        return true;
+    }
+
     [HarmonyPostfix, HarmonyPatch(typeof(TraitFertilizer), "OnSimulateHour")]
-    public static void OnSimulateHour(TraitFertilizer __instance, VirtualDate date)
+    public static void OnSimulateHour(TraitFertilizer __instance, VirtualDate date, Cell __state)
     {
         if (!EClass._zone.IsPCFaction) return;
         if (Plugin.minLevelRegrowth.Value > EClass.pc.elements.Value(286)) return;
-        Cell cell = __instance.owner.Cell;
+        Cell cell = __state;
+        if (cell == null) return;
         string[] fruit_trees = ["banana", "fruit", "fruit_pear", "fruit_orange"];
         if (!fruit_trees.Contains(cell.growth.source.GetAlias))
         {
