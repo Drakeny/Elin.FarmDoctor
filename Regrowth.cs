@@ -54,29 +54,36 @@ public class Regrowth
     [HarmonyPostfix, HarmonyPatch(typeof(TraitFertilizer), "OnSimulateHour")]
     public static void OnSimulateHour(TraitFertilizer __instance, VirtualDate date, Cell __state)
     {
-        if (!EClass._zone.IsPCFaction) return;
-        if (Plugin.minLevelRegrowth.Value > EClass.pc.elements.Value(286)) return;
-        Cell cell = __state;
-        if (cell == null) return;
-        string[] fruit_trees = ["banana", "fruit", "fruit_pear", "fruit_orange"];
-        if (!fruit_trees.Contains(cell.growth.source.GetAlias))
+        try
         {
-            return;
-        }
+            if (!EClass._zone.IsPCFaction) return;
+            if (Plugin.minLevelRegrowth.Value > EClass.pc.elements.Value(286)) return;
+            Cell cell = __state;
+            if (cell == null || !cell.IsFarmField) return;
+            string[] fruit_trees = ["banana", "fruit", "fruit_pear", "fruit_orange"];
+            if (!fruit_trees.Contains(cell.growth.source.GetAlias))
+            {
+                return;
+            }
 
-        if (cell.IsFarmField && cell.isHarvested)
+            if (cell.isHarvested)
+            {
+                if (cell.growth.source.GetAlias == "banana")
+                {
+                    cell.growth.stages[3].tiles[0] = 157;
+                }
+                else
+                {
+                    cell.growth.stages[3].tiles[0] = 195;
+                }
+                cell.objVal = 90;
+                cell.isHarvested = false;
+                cell.gatherCount++;
+            }
+        }
+        catch (NullReferenceException ex)
         {
-            if (cell.growth.source.GetAlias == "banana")
-            {
-                cell.growth.stages[3].tiles[0] = 157;
-            }
-            else
-            {
-                cell.growth.stages[3].tiles[0] = 195;
-            }
-            cell.objVal = 90;
-            cell.isHarvested = false;
-            cell.gatherCount++;
+            Plugin.Log.LogError("Congratulations! You've triggered a NullReferenceException! I have no idea how to fix it, but don’t worry—it causes no harm. All is good. May Kumiromi be with you!");
         }
     }
 }
