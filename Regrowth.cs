@@ -54,12 +54,12 @@ public class Regrowth
     [HarmonyPostfix, HarmonyPatch(typeof(TraitFertilizer), "OnSimulateHour")]
     public static void OnSimulateHour(TraitFertilizer __instance, VirtualDate date, Cell __state)
     {
+        if (!EClass._zone.IsPCFaction) return;
+        if (Plugin.minLevelRegrowth.Value > EClass.pc.elements.Value(286)) return;
         try
         {
-            if (!EClass._zone.IsPCFaction) return;
-            if (Plugin.minLevelRegrowth.Value > EClass.pc.elements.Value(286)) return;
             Cell cell = __state;
-            if (cell == null || !cell.IsFarmField) return;
+            if (cell.growth == null || !cell.IsFarmField) return;
             string[] fruit_trees = ["banana", "fruit", "fruit_pear", "fruit_orange"];
             if (!fruit_trees.Contains(cell.growth.source.GetAlias))
             {
