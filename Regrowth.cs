@@ -81,7 +81,7 @@ public class Regrowth
                 cell.gatherCount++;
             }
         }
-        catch (NullReferenceException ex)
+        catch (NullReferenceException)
         {
             Plugin.Log.LogError("Congratulations! You've triggered a NullReferenceException! I have no idea how to fix it, but don’t worry—it causes no harm. All is good. May Kumiromi be with you!");
         }

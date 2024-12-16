@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using BepInEx;
 using BepInEx.Configuration;
@@ -17,6 +18,15 @@ public class Plugin : BaseUnityPlugin
     public static ConfigEntry<bool> regrowth;
     public static ConfigEntry<int> minLevelRegrowth;
     private static Harmony harmony;
+
+    public static string dir;
+    public void OnStartCore()
+    {
+        dir = Path.GetDirectoryName(Info.Location);
+        var excel = dir + "/SourceCard.xlsx";
+        var sources = Core.Instance.sources;
+        ModUtil.ImportExcel(excel, "Thing", sources.things);
+    }
 
     private void Start()
     {
@@ -45,6 +55,7 @@ public class Plugin : BaseUnityPlugin
         harmony = new Harmony("DrakenyDev.Elin.FarmDoctor");
         harmony.PatchAll(typeof(GrowthInfo));
         harmony.PatchAll(typeof(CropInfo));
+        harmony.PatchAll(typeof(GeneTransfer));
         if (regrowth.Value)
         {
             harmony.PatchAll(typeof(Regrowth));
